@@ -1,0 +1,54 @@
+-- 1. Selezionare tutte le nazioni il cui nome inizia con la P e la cui area è maggiore di 1000 kmq
+SELECT *
+FROM countries c 
+WHERE c.name LIKE 'P%' AND c.area > 1000;
+
+-- 2. Contare quante nazioni sono presenti nel database
+SELECT count(*) AS number_of_countries
+FROM continents c 
+
+-- 3. Selezionare il nome delle regioni del continente europeo, in ordine alfabetico
+SELECT r.name 
+FROM regions r 
+JOIN continents c ON r.continent_id = c.continent_id 
+WHERE c.name = 'Europe'
+ORDER BY r.name ASC;
+
+-- 4. Contare quante regioni sono presenti nel continente Africa
+SELECT count(*) AS number_of_African_region
+FROM regions r 
+JOIN continents c ON r.continent_id = c.continent_id 
+WHERE c.name = 'Africa';
+
+-- 5. Selezionare quali nazioni non hanno un national day
+SELECT *
+FROM countries c 
+WHERE c.national_day IS NULL;
+
+-- 6. Per ogni nazione, in ordine alfabetico, selezionare il nome, la regione e il continente
+SELECT c.name, r.name, c2.name 
+FROM countries c 
+JOIN regions r ON c.region_id = r.region_id 
+JOIN continents c2 ON c2.continent_id = r.continent_id 
+ORDER BY c.name ASC;  
+
+-- 7. Selezionare le lingue ufficiali dell’Albania
+SELECT l.`language` 
+FROM countries c 
+JOIN country_languages cl ON c.country_id = cl.country_id 
+JOIN languages l ON cl.language_id = l.language_id 
+WHERE c.name ='Albania'
+
+-- 8. Selezionare il Gross domestic product (GDP) medio dello United Kingdom tra il 2000 e il 2010
+SELECT avg(cs.gdp) 
+FROM country_stats cs 
+JOIN countries c ON cs.country_id = c.country_id 
+WHERE c.name = 'United Kingdom' AND cs.`year` >= 2000 AND cs.`year` <= 2010;
+
+-- 9. Selezionare tutte le nazioni in cui si parla hindi, ordinate dalla più estesa alla meno estesa
+SELECT c.name, c.area, l.`language` 
+FROM countries c 
+JOIN country_languages cl ON c.country_id = cl.country_id 
+JOIN languages l ON cl.language_id = l.language_id 
+WHERE l.`language` = 'hindi' 
+ORDER BY c.area DESC;
